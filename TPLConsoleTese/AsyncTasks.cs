@@ -9,13 +9,26 @@ namespace TPLConsoleTese
 {
     public class AsyncTasks
     {
-        public static void Test ()
+        public static async void Test ()
         {
             var task = TestAsync();
             task.ContinueWith(t => Console.WriteLine(t.Result));
             Console.WriteLine($"Текущая задача {Task.CurrentId},thread id {Thread.CurrentThread.ManagedThreadId}");
             Console.WriteLine($"Задача {task.Id} запущена");
 
+            var data = Enumerable.Range(0, 11).Select(i => $"String #{i}");
+
+            var tasks = data.Select(d => Task.Run(() => { Console.WriteLine(d); }));
+
+            //await Task.WhenAll(tasks);
+            await Task.WhenAny(tasks);
+
+            //await Task.WhenAll(
+            //    Task.Run(() => { /* Длительная задача № 1*/}),
+            //    Task.Run(() => { /* Длительная задача № 2*/}),
+            //    Task.Run(() => { /* Длительная задача № 3*/}),
+            //    Task.Run(() => { /* Длительная задача № 4*/})
+            //    );
         }
 
 
@@ -28,4 +41,3 @@ namespace TPLConsoleTese
 
     }
 }
-1 33
